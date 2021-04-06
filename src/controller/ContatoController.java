@@ -24,4 +24,12 @@ public class ContatoController {
         }
     }
     
+    public void excluir(Contato contato) {
+        try {
+            new ContatoDAO().excluir(contato);
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Erro ao excluir contato", "Cadastro ", 0);
+        }
+    }
 }

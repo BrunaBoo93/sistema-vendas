@@ -17,4 +17,11 @@ public class Util {
     public static Integer getInteger(String args) {
         return Integer.parseInt(args);
     }
+    
+    /*
+     * método para converter uma String em double
+     */
+    public static Double getDouble(String args) {
+        return Double.parseDouble(args);
+    }
 }

@@ -16,8 +16,8 @@ public class ContasReceberController {
 
     private final ContasReceberView contasReceberView;
 
-    //public ContasPagarController() {
-    //  }
+
+    
     public ContasReceberController(ContasReceberView contasReceberView) {
         this.contasReceberView = contasReceberView;
     }

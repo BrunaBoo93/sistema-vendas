@@ -32,6 +32,7 @@ public class FuncionarioView extends javax.swing.JFrame {
         menu = mv;
         controller.bloqueioInicial();
         controller.carregarComboEstado();
+        controller.carregarTabela();
         setLocationRelativeTo(null);
         setResizable(false);
         setVisible(true);

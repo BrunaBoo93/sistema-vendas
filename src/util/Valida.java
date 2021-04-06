@@ -1,6 +1,7 @@
 package util;
 
 import br.com.caelum.stella.validation.CNPJValidator;
+import br.com.caelum.stella.validation.CPFValidator;
 import br.com.caelum.stella.validation.ie.IESaoPauloValidator;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -101,6 +102,18 @@ public class Valida {
         }
     }
 
+     /*
+     * metodo para verificar s eo ampo e do tipo double
+     */
+    public static boolean isDouble(String args) {
+        try {
+            Double.parseDouble(args);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     /*
      * método para vlaidar selecao da combobox
      */
@@ -120,6 +133,27 @@ public class Valida {
      */
     public static boolean isCelularVazio(String args) {
         return args.equals(Mascara.MASCARA_CELULAR);
+    }
+
+    /*
+     * método para verificar se o CPF foi preenchido
+     */
+    public static boolean isCpfVazio(String args) {
+        return args.equals(Mascara.MASCARA_CPF);
+    }
+
+    /*
+     *método para verificar se o CPF é valido
+     */
+    public static boolean isCpfInvalido(String args) {
+        CPFValidator validador = new CPFValidator();
+        try {
+            validador.assertValid(args);
+            return false;
+        } catch (Exception e) {
+            return true;
+        }
+
     }
 
 }

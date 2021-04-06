@@ -28,8 +28,10 @@ public class ProdutoView extends javax.swing.JFrame {
         getRootPane().setWindowDecorationStyle(JRootPane.PLAIN_DIALOG);
         initComponents();
         menu = mv;
-        controller.bloqueioInicial();
         setLocationRelativeTo(null);
+        controller.carregarTabela();
+        controller.bloqueioInicial();
+        controller.carregarComboFornecedor();
         setResizable(false);
         setVisible(true);
     }
@@ -130,17 +132,11 @@ public class ProdutoView extends javax.swing.JFrame {
             }
         });
 
-        cbxFornecedor.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "- Selecione um Fornecedor -", "Item 2", "Item 3", "Item 4" }));
-
         jLabel2.setText("Fornecedor:");
 
         jLabel3.setText("Valor Custo:");
 
         jLabel4.setText("Valor Venda:");
-
-        tfValorVenda.setText("R$ ");
-
-        tfValorCusto.setText("R$ ");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);

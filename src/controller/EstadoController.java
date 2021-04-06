@@ -26,7 +26,7 @@ public class EstadoController {
         try {
             retorno = new EstadoDAO().buscarTodos();
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao consultar estador");
+            JOptionPane.showMessageDialog(null, "Erro ao consultar estado");
             Logger.getLogger(EstadoController.class.getName()).log(Level.SEVERE, null, ex);
         }
         

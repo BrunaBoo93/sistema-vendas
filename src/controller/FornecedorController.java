@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 import model.Cidade;
 import model.Contato;
 import model.Endereco;
@@ -26,29 +27,34 @@ import view.MenuView;
  */
 public class FornecedorController {
 
-    private Fornecedor fornecedor;
-    private final FornecedorView fornecedorView;
+    private FornecedorView fornecedorView;
     private ArrayList<Estado> listaEstados;
     private ArrayList<Cidade> listaCidades;
+    private ArrayList<Fornecedor> listaFornecedores;
 
-    private PessoaJuridica pessoaJuridica;
+    private Fornecedor fornecedor;
+    private PessoaJuridica pessoa;
     private Endereco endereco;
     private Contato contato;
 
     private boolean alterar;
 
-    //public FornecedorController() {
-    //}
     public FornecedorController(FornecedorView fornecedorView) {
         this.fornecedorView = fornecedorView;
     }
 
+    public FornecedorController() {
+        
+    }
+
+    
+
     public void acaoBotaoNovo() {
         alterar = false;
-        this.fornecedorView.getBtNovo().setEnabled(false);
-        this.fornecedorView.getBtAlterar().setEnabled(false);
-        this.fornecedorView.getBtExcluir().setEnabled(false);
-        this.fornecedorView.getBtSair().setEnabled(false);
+        // this.fornecedorView.getBtNovo().setEnabled(false);
+        // this.fornecedorView.getBtAlterar().setEnabled(false);
+        //  this.fornecedorView.getBtExcluir().setEnabled(false);
+        //  this.fornecedorView.getBtSair().setEnabled(false);
         //habilitando os botões de controle
         this.fornecedorView.getBtSalvarFornecedor().setEnabled(true);
         this.fornecedorView.getBtCancelar().setEnabled(true);
@@ -59,11 +65,37 @@ public class FornecedorController {
 
     public void acaoBotaoAlterar() {
         alterar = true;
+        if (fornecedorView.getTabelaFornecedores().getSelectedRow() < 0) {
+            JOptionPane.showMessageDialog(fornecedorView, Mensagem.selecione_fornecedor, Mensagem.cadastro_fornecedor, 0);
+        } else {
+            fornecedor = listaFornecedores.get(fornecedorView.getTabelaFornecedores().getSelectedRow());
+            bloqueioAlterar();
+            carregarTela();
+
+        }
 
     }
 
     public void acaoBotaoExcluir() {
+        if (fornecedorView.getTabelaFornecedores().getSelectedRow() < 0) {
+            JOptionPane.showMessageDialog(fornecedorView, Mensagem.selecione_fornecedor, Mensagem.cadastro_fornecedor, 0);
+        } else {
+            int opcao = JOptionPane.showConfirmDialog(fornecedorView, Mensagem.excluir_fornecedor, Mensagem.cadastro_fornecedor, 2);
+            if (opcao == JOptionPane.YES_OPTION) {
+                fornecedor = listaFornecedores.get(fornecedorView.getTabelaFornecedores().getSelectedRow());
 
+                new FornecedorDAO().excluir(fornecedor);
+
+                new ContatoController().excluir(fornecedor.getContatoIdContato());
+                new EnderecoController().excluir(fornecedor.getEnderecoIdEndereco());
+                new PessoaJuridicaController().excluir(fornecedor.getPessoaJuridicaIdPessoaJuridica());
+
+                JOptionPane.showMessageDialog(fornecedorView, "Fornecedor excluido com sucesso", Mensagem.cadastro_fornecedor, 1);
+
+                carregarTabela();
+            }
+
+        }
     }
 
     public void acaoBotaoSair(MenuView menu) {
@@ -73,34 +105,43 @@ public class FornecedorController {
 
     }
 
-    public void acaoBotaoSalvar() {
-        if (alterar) {
-            //função de alteração
-        } else {
-            if (validarIncluir()) {
-                pessoaJuridica = getPessoaJuridica();
-                endereco = getEndereco();
-                contato = getContato();
+    public void acaoBotaoSalvar() { //vaerificar esse meotdo aula 2
+        if (validarDados()) {
+            if (alterar) {
+                pessoa = fornecedor.getPessoaJuridicaIdPessoaJuridica();
+                endereco = fornecedor.getEnderecoIdEndereco();
+                contato = fornecedor.getContatoIdContato();
 
-                new PessoaJuridicaController().salvar(pessoaJuridica);
-                new EnderecoController().salvar(endereco);
-                new ContatoController().salvar(contato);
+            } else {
 
+                //pra alterar utilizo objeto existente
+                //para incluir preciso de um novo objeto
                 fornecedor = new Fornecedor();
-                fornecedor.setContato(this.fornecedorView.getTfContato().getText());
-                fornecedor.setPessoaJuridicaIdPessoaJuridica(pessoaJuridica);
-                fornecedor.setEnderecoIdEndereco(endereco);
-                fornecedor.setContatoIdContato(contato);
+                pessoa = new PessoaJuridica();
+                endereco = new Endereco();
+                contato = new Contato();
+            }
+            pessoa = getPessoaJuridica();
+            endereco = getEndereco();
+            contato = getContato();
 
-                try {
-                    new FornecedorDAO().salvar(fornecedor);
-                    JOptionPane.showMessageDialog(null, Mensagem.fornecedorSalvo, Mensagem.cadastro_fornecedor, 1);
-                    limparCampos();
-                    bloqueioInicial();
-                } catch (Exception e) {
-                    e.printStackTrace();
+            new PessoaJuridicaController().salvar(pessoa);
+            new EnderecoController().salvar(endereco);
+            new ContatoController().salvar(contato);
 
-                }
+            fornecedor.setContato(this.fornecedorView.getTfContato().getText());
+            fornecedor.setPessoaJuridicaIdPessoaJuridica(pessoa);
+            fornecedor.setEnderecoIdEndereco(endereco);
+            fornecedor.setContatoIdContato(contato);
+
+            try {
+                new FornecedorDAO().salvar(fornecedor);
+                JOptionPane.showMessageDialog(null, Mensagem.fornecedorSalvo, Mensagem.cadastro_fornecedor, 1);
+                limparCampos();
+                bloqueioInicial();
+                carregarTabela();
+            } catch (Exception e) {
+                e.printStackTrace();
 
             }
 
@@ -205,8 +246,10 @@ public class FornecedorController {
         if (indice >= 0) {
             try {
                 listaCidades = new CidadeController().buscarPorEstado(listaEstados.get(indice));
+
             } catch (Exception ex) {
-                Logger.getLogger(FornecedorController.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(FornecedorController.class
+                        .getName()).log(Level.SEVERE, null, ex);
             }
             //removendo todos os dados da combo
             this.fornecedorView.getCbxCidade().removeAllItems();
@@ -224,7 +267,7 @@ public class FornecedorController {
     /*
      * método para validar dados da inclusãio
      */
-    private boolean validarIncluir() {
+    private boolean validarDados() {
 
         //validando o CNPJ
         if (Valida.isCnpjVazio(this.fornecedorView.getTfCnpj().getText())) {
@@ -336,7 +379,7 @@ public class FornecedorController {
      *método para retornar um novo objeto
      */
     private PessoaJuridica getPessoaJuridica() {
-        PessoaJuridica pessoa = new PessoaJuridica();
+
         pessoa.setCnpj(this.fornecedorView.getTfCnpj().getText());
         pessoa.setInscricaoEstadual(this.fornecedorView.getTfInscrEstadual().getText());
         pessoa.setRazaoSocial(this.fornecedorView.getTfRazaoSocial().getText());
@@ -348,7 +391,7 @@ public class FornecedorController {
      *método para retornar um novo objeto
      */
     private Endereco getEndereco() {
-        Endereco endereco = new Endereco();
+
         endereco.setNome(this.fornecedorView.getTfEndereco().getText());
         endereco.setNumero(Util.getInteger(this.fornecedorView.getTfNumero().getText()));
         endereco.setComplemento(this.fornecedorView.getTfComplemento().getText());
@@ -362,11 +405,94 @@ public class FornecedorController {
      *método para retornar um novo objeto
      */
     private Contato getContato() {
-        Contato contato = new Contato();
+
         contato.setTelefone(this.fornecedorView.getTfTelefone().getText());
         contato.setCelular(this.fornecedorView.getTfCelular().getText());
         contato.setEmail(this.fornecedorView.getTfEmail().getText());
         return contato;
+    }
+
+    /*
+     * método responsável por chamar o DAO e arregador os fornecedores cadastrados 
+     * no banco de dados
+     */
+    public ArrayList<Fornecedor> buscarTodos() {
+        try {
+            return listaFornecedores = new FornecedorDAO().buscarTodos();
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(fornecedorView, Mensagem.fornecedor_erro_consulta, Mensagem.cadastro_fornecedor, 0);
+        }
+        return null;
+    }
+
+    /*
+     *Método para carregar a JTable de fornecedor
+     */
+    public void carregarTabela() {
+        buscarTodos();
+        DefaultTableModel modelo = (DefaultTableModel) fornecedorView.getTabelaFornecedores().getModel(); //
+        //limpar a tabla
+        modelo.setRowCount(0);
+        //carregar a tabela
+        for (Fornecedor fornecedor : listaFornecedores) {
+            modelo.addRow(new String[]{
+                fornecedor.getPessoaJuridicaIdPessoaJuridica().getRazaoSocial(),
+                fornecedor.getContatoIdContato().getTelefone(),
+                fornecedor.getContato(),
+                fornecedor.getEnderecoIdEndereco().getCidadeIdCidade().getNome()});
+        }
+
+    }
+
+    /*
+     *método para carregar a tela com dados do fonewcedor
+     */
+    private void carregarTela() {
+        fornecedorView.getTfCnpj().setText(fornecedor.getPessoaJuridicaIdPessoaJuridica().getCnpj());
+        fornecedorView.getTfInscrEstadual().setText(fornecedor.getPessoaJuridicaIdPessoaJuridica().getInscricaoEstadual());
+        fornecedorView.getTfRazaoSocial().setText(fornecedor.getPessoaJuridicaIdPessoaJuridica().getRazaoSocial());
+        fornecedorView.getTfDataFundacao().setText(fornecedor.getPessoaJuridicaIdPessoaJuridica().getDataFundacao());
+        fornecedorView.getTfEndereco().setText(fornecedor.getEnderecoIdEndereco().getNome());
+        fornecedorView.getTfNumero().setText(fornecedor.getEnderecoIdEndereco().getNumero() + "");
+        fornecedorView.getTfComplemento().setText(fornecedor.getEnderecoIdEndereco().getComplemento());
+        fornecedorView.getTfBairro().setText(fornecedor.getEnderecoIdEndereco().getBairro());
+
+        //hierarquia de banco
+        fornecedorView.getCbxUF().setSelectedItem(fornecedor.getEnderecoIdEndereco().getCidadeIdCidade().getEstadoIdEstado().getNome());
+        fornecedorView.getCbxCidade().setSelectedItem(fornecedor.getEnderecoIdEndereco().getCidadeIdCidade().getNome());
+        fornecedorView.getTfCep().setText((fornecedor.getEnderecoIdEndereco().getCep()));
+        fornecedorView.getTfTelefone().setText(fornecedor.getContatoIdContato().getTelefone());
+        fornecedorView.getTfCelular().setText(fornecedor.getContatoIdContato().getCelular());
+        fornecedorView.getTfEmail().setText(fornecedor.getContatoIdContato().getEmail());
+        fornecedorView.getTfContato().setText(fornecedor.getContato());
+
+    }
+
+    /*
+     * método para bloquear os cmapos na ação do alterar
+     */
+    private void bloqueioAlterar() {
+        this.fornecedorView.getBtNovo().setEnabled(false);
+        this.fornecedorView.getBtAlterar().setEnabled(false);
+        this.fornecedorView.getBtExcluir().setEnabled(false);
+        this.fornecedorView.getBtSair().setEnabled(false);
+        //habilitando os botões de controle
+        this.fornecedorView.getBtSalvarFornecedor().setEnabled(true);
+        this.fornecedorView.getBtCancelar().setEnabled(true);
+
+        this.fornecedorView.getTfRazaoSocial().setEditable(true);
+        this.fornecedorView.getTfContato().setEditable(true);
+        this.fornecedorView.getTfEndereco().setEditable(true);
+        this.fornecedorView.getTfNumero().setEditable(true);
+        this.fornecedorView.getTfBairro().setEditable(true);
+        this.fornecedorView.getCbxUF().setEnabled(true);
+        this.fornecedorView.getTfTelefone().setEditable(true);
+        this.fornecedorView.getTfCep().setEditable(true);
+        this.fornecedorView.getTfCelular().setEditable(true);
+        this.fornecedorView.getTfComplemento().setEditable(true);
+        this.fornecedorView.getTfEmail().setEditable(true);
+
     }
 
 }

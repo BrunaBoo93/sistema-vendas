@@ -26,6 +26,7 @@ public class FornecedorView extends javax.swing.JFrame {
         menu = mv;
         controller.bloqueioInicial();
         controller.carregarComboEstado();
+        controller.carregarTabela();
         setLocationRelativeTo(null);
         setResizable(false);
         setVisible(true);

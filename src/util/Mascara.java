@@ -20,5 +20,9 @@ public class Mascara {
     public static String MASCARA_CEP = "  .   -   ";
     public static String MASCARA_CELULAR= "(  )     -    ";
     
+    public static String MASCARA_RG = "  .   .   - ";
+    public static String MASCARA_CPF = "   .   .   -  ";
+    
+    
     
 }
