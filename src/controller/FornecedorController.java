@@ -142,7 +142,7 @@ public class FornecedorController {
                 carregarTabela();
             } catch (Exception e) {
                 e.printStackTrace();
-
+                   JOptionPane.showMessageDialog(fornecedorView, Mensagem.fornecedor_erro, Mensagem.cadastro_fornecedor, 0);
             }
 
         }
@@ -281,12 +281,12 @@ public class FornecedorController {
         }
 
         //validando a INSCRIÇAO ESTADUAL
-        if (Valida.isIscricaoEstadualVazio(this.fornecedorView.getTfInscrEstadual().getText())) {
-            JOptionPane.showMessageDialog(fornecedorView, Mensagem.incricaoEstadualVazio, Mensagem.cadastro_fornecedor, 0);
+        if (Valida.isInscricaoEstadualVazio(this.fornecedorView.getTfInscrEstadual().getText())) {
+            JOptionPane.showMessageDialog(fornecedorView, Mensagem.inscricaoEstadualVazio, Mensagem.cadastro_fornecedor, 0);
             this.fornecedorView.getTfInscrEstadual().grabFocus();
             return false;
-        } else if (Valida.isIscricaoEstadualInvalido(this.fornecedorView.getTfInscrEstadual().getText())) {
-            JOptionPane.showMessageDialog(fornecedorView, Mensagem.incricaoEstadualInvalida, Mensagem.cadastro_fornecedor, 0);
+        } else if (Valida.isInscricaoEstadualInvalido(this.fornecedorView.getTfInscrEstadual().getText())) {
+            JOptionPane.showMessageDialog(fornecedorView, Mensagem.inscricaoEstadualInvalida, Mensagem.cadastro_fornecedor, 0);
             this.fornecedorView.getTfInscrEstadual().grabFocus();
             return false;
         }
@@ -304,7 +304,7 @@ public class FornecedorController {
             this.fornecedorView.getTfDataFundacao().grabFocus();
             return false;
         } else if (Valida.isDataVazio(this.fornecedorView.getTfDataFundacao().getText())) {
-            JOptionPane.showMessageDialog(fornecedorView, Mensagem.dataFundacaoInvalida, Mensagem.cadastro_fornecedor, 0);
+            JOptionPane.showMessageDialog(fornecedorView, Mensagem.dataInvalida, Mensagem.cadastro_fornecedor, 0);
             this.fornecedorView.getTfDataFundacao().grabFocus();
             return false;
         }

@@ -7,6 +7,7 @@ package view;
 
 import controller.MenuController;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JRootPane;
@@ -25,6 +26,7 @@ public class MenuView extends javax.swing.JFrame {
     public MenuView() {
         getRootPane().setWindowDecorationStyle(JRootPane.PLAIN_DIALOG);
         initComponents();
+        controller.carregarUsuario();
         setExtendedState(MAXIMIZED_BOTH);
 
     }
@@ -40,7 +42,7 @@ public class MenuView extends javax.swing.JFrame {
 
         jMenu1 = new javax.swing.JMenu();
         jDialog1 = new javax.swing.JDialog();
-        jLabel1 = new javax.swing.JLabel();
+        lbUser = new javax.swing.JLabel();
         btClientes = new javax.swing.JButton();
         btFornecedor = new javax.swing.JButton();
         btProdutos = new javax.swing.JButton();
@@ -48,6 +50,7 @@ public class MenuView extends javax.swing.JFrame {
         btVendas = new javax.swing.JButton();
         btCompras = new javax.swing.JButton();
         btSair = new javax.swing.JButton();
+        lbUsuario = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         menuCadastro = new javax.swing.JMenu();
         jMenuCliente = new javax.swing.JMenuItem();
@@ -88,7 +91,8 @@ public class MenuView extends javax.swing.JFrame {
         setTitle("Sistema Comercial de Vendas");
         setResizable(false);
 
-        jLabel1.setText("Usuário:");
+        lbUser.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lbUser.setText("Usuário:");
 
         btClientes.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         btClientes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/clientes.png"))); // NOI18N
@@ -317,9 +321,6 @@ public class MenuView extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
                         .addComponent(btClientes, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
                         .addComponent(btFornecedor, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -332,7 +333,12 @@ public class MenuView extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
                         .addComponent(btCompras, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
-                        .addComponent(btSair, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btSair, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(lbUser)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lbUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -347,9 +353,11 @@ public class MenuView extends javax.swing.JFrame {
                     .addComponent(btProdutos, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btVendas, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btCompras, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 316, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 157, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lbUser, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(lbUsuario, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(43, 43, 43))
         );
 
         btClientes.getAccessibleContext().setAccessibleDescription("");
@@ -449,7 +457,6 @@ public class MenuView extends javax.swing.JFrame {
     private javax.swing.JButton btSair;
     private javax.swing.JButton btVendas;
     private javax.swing.JDialog jDialog1;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuCliente;
@@ -465,6 +472,8 @@ public class MenuView extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuSair;
     private javax.swing.JMenuItem jMenuSobre;
     private javax.swing.JMenuItem jMenuVendas;
+    private javax.swing.JLabel lbUser;
+    private javax.swing.JLabel lbUsuario;
     private javax.swing.JMenu menuCadastro;
     private javax.swing.JMenu menuCompras;
     private javax.swing.JMenu menuContas;
@@ -683,4 +692,14 @@ public class MenuView extends javax.swing.JFrame {
         this.jMenuVendas = jMenuVendas;
     }
 
+    public JLabel getLbUsuario() {
+        return lbUsuario;
+    }
+
+    public void setLbUsuario(JLabel lbUsuario) {
+        this.lbUsuario = lbUsuario;
+    }
+
+    
+    
 }

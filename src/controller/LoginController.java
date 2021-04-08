@@ -5,10 +5,12 @@
  */
 package controller;
 
-import dao.LoginDAO;
 import javax.swing.JOptionPane;
-import org.eclipse.persistence.internal.oxm.mappings.Login;
+import model.Funcionario;
 import util.Mensagem;
+import util.Valida;
+import view.LoginView;
+import view.MenuView;
 
 /**
  * Classe resopnsável por controlar os métodos de acesso a base de dados
@@ -19,26 +21,65 @@ import util.Mensagem;
  */
 public class LoginController {
 
-    LoginController() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    private LoginView loginView;
+    public static String nomeFuncionario;
+
+    public LoginController() {
+
     }
 
-    public void salvar(Login login) {
-        try {
-            new LoginDAO().salvar(login);
-        } catch (Exception e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null, Mensagem.login_erro, Mensagem.cadastro_login, 0);
+    public LoginController(LoginView loginView) {
+        this.loginView = loginView;
+    }
+
+    public void acaoBotaoConfirmar() {
+        if (validarDados()) {
+            efetuarLogin();
         }
     }
 
-    public void excluir(Login login) {
-        try {
-            new LoginDAO().excluir(login);
-        } catch (Exception e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Erro ao excluir pessoa", "Cadastro ", 0);
+    public void acaoBotaoCancelar() {
+        System.exit(0);
+    }
+    
+    private boolean validarDados(){
+        if (Valida.isEmptyOrNull(loginView.getTfLogin().getText())) {
+            JOptionPane.showMessageDialog(null, "Informe o login, campo obrigatório!");
+            loginView.getTfLogin().grabFocus();
+            return false;
+        }
+        
+        if (Valida.isEmptyOrNull(loginView.getTfSenha().getText())) {
+            JOptionPane.showMessageDialog(null, "Informe a senha, campo obrigatório!");
+            loginView.getTfSenha().grabFocus();
+            return false;
+        }
+        
+        return true;
+    }
+    
+    private void efetuarLogin(){
+        String login = loginView.getTfLogin().getText();
+        String senha = loginView.getTfSenha().getText();
+        
+        boolean achouLogin = false;
+        boolean achouSenha = false;
+        
+        for (Funcionario funcionario : new FuncionarioController().buscarPorLogin(login)) {
+            achouLogin = true;
+            if (funcionario.getSenha().equals(senha)) {
+                nomeFuncionario = funcionario.getPessoaFisicaIdPessoaFisica().getNome();
+                loginView.dispose();
+                new MenuView().setVisible(true);
+                achouSenha = true;
+                break;
+            }else{
+                achouSenha = false;
+            }
+        }
+        
+        if (achouLogin == false || achouSenha == false) {
+            JOptionPane.showMessageDialog(null, Mensagem.credencial_invalida);
         }
     }
-
 }

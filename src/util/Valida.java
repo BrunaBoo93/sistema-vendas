@@ -37,16 +37,37 @@ public class Valida {
     }
 
     /*
+     * método para verificar se o CPF foi preenchido
+     */
+    public static boolean isCpfVazio(String args) {
+        return args.equals(Mascara.MASCARA_CPF);
+    }
+
+    /*
+     *método para verificar se o CPF é valido
+     */
+    public static boolean isCpfInvalido(String args) {
+        CPFValidator validador = new CPFValidator();
+        try {
+            validador.assertValid(args);
+            return false;
+        } catch (Exception e) {
+            return true;
+        }
+
+    }
+
+    /*
      * método para verificar se a Inscrição Estadual foi preenchidA
      */
-    public static boolean isIscricaoEstadualVazio(String args) {
+    public static boolean isInscricaoEstadualVazio(String args) {
         return args.equals(Mascara.MASCARA_IE);
     }
 
     /*
      *método para verificar se a Inscrição Estadual é validA
      */
-    public static boolean isIscricaoEstadualInvalido(String args) {
+    public static boolean isInscricaoEstadualInvalido(String args) {
         IESaoPauloValidator validador = new IESaoPauloValidator();
         try {
             validador.assertValid(args);
@@ -102,7 +123,7 @@ public class Valida {
         }
     }
 
-     /*
+    /*
      * metodo para verificar s eo ampo e do tipo double
      */
     public static boolean isDouble(String args) {
@@ -136,24 +157,10 @@ public class Valida {
     }
 
     /*
-     * método para verificar se o CPF foi preenchido
+     * método para verificar se o RG foi preenchido
      */
-    public static boolean isCpfVazio(String args) {
-        return args.equals(Mascara.MASCARA_CPF);
-    }
-
-    /*
-     *método para verificar se o CPF é valido
-     */
-    public static boolean isCpfInvalido(String args) {
-        CPFValidator validador = new CPFValidator();
-        try {
-            validador.assertValid(args);
-            return false;
-        } catch (Exception e) {
-            return true;
-        }
-
+    public static boolean isRgVazio(String args) {
+        return args.equals(Mascara.MASCARA_RG);
     }
 
 }

@@ -2,6 +2,7 @@ package dao;
 
 import java.util.ArrayList;
 import model.Cliente;
+import model.Estado;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Order;
@@ -14,12 +15,12 @@ import util.HibernateUtil;
  * @since 24/03/2021
  * @version 1.0
  */
-public class ClienteDAO {
+public class ClienteDAO extends GenericDAO{
     /*
      * método para consultar os Clientees gravados na tabela
      */
 
-    public ArrayList<Cliente> buscarTodos() throws Exception {
+    public ArrayList<Cliente> buscarPorEstado(Estado estado) throws Exception {
         //lista auxiliar para retornar no método
         ArrayList<Cliente> retorno = new ArrayList<>();
         //classe auxiliar para armazenar a sessão com o banco de dados
@@ -35,4 +36,6 @@ public class ClienteDAO {
         //retornando a lista preenchida
         return retorno;
     }//fim do método buscarTodos
+
+
 }

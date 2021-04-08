@@ -27,7 +27,7 @@ import view.MenuView;
  */
 public class FuncionarioController {
 
-    private final FuncionarioView funcionarioView;
+    private FuncionarioView funcionarioView;
 
     //arraylist para lista de estado, cidade e funcionarios
     private ArrayList<Estado> listaEstados;
@@ -42,6 +42,11 @@ public class FuncionarioController {
     //variavel booleana de controle
     private boolean alterar;
 
+        //método contrutor
+    public FuncionarioController() {
+       
+    }
+    
     //método contrutor
     public FuncionarioController(FuncionarioView funcionarioView) {
         this.funcionarioView = funcionarioView;
@@ -74,7 +79,7 @@ public class FuncionarioController {
             funcionario = listaFuncionarios.get(funcionarioView.getTabelaFuncionarios().getSelectedRow());
             //o método bloqueioAlterar é chamado para que somente os campos permitidos, de acordo com a regra de negócio, estejam habilitados para seleção
             bloqueioAlterar();
-            //a tabela é carregada novamente
+            //a tela é carregada
             carregarTela();
 
         }
@@ -172,7 +177,7 @@ public class FuncionarioController {
                 carregarTabela();
             } catch (Exception e) {
                 e.printStackTrace();
-
+                   JOptionPane.showMessageDialog(funcionarioView, Mensagem.funcionario_erro, Mensagem.cadastro_funcionario, 0);
             }
 
         }
@@ -287,7 +292,7 @@ public class FuncionarioController {
             try {
                 listaCidades = new CidadeController().buscarPorEstado(listaEstados.get(indice));
             } catch (Exception ex) {
-                JOptionPane.showMessageDialog(null, "Erro ao consultar cidades");
+                JOptionPane.showMessageDialog(null, Mensagem.erro_consultar_cidade);
                 Logger.getLogger(FuncionarioController.class.getName()).log(Level.SEVERE, null, ex);
             }
             //removendo todos os dados da combo
@@ -315,7 +320,15 @@ public class FuncionarioController {
             this.funcionarioView.getTfCpf().grabFocus();
             return false;
         }
-
+        
+        //validando o RG
+            //validando o RG
+            if (Valida.isRgVazio(funcionarioView.getTfRg().getText())) {
+                JOptionPane.showMessageDialog(funcionarioView, Mensagem.rgVazio, Mensagem.cadastro_funcionario, 0);
+                funcionarioView.getTfRg().grabFocus();
+                return false;
+            }
+        
         //validando o nome
         if (Valida.isEmptyOrNull(this.funcionarioView.getTfNome().getText())) {
             JOptionPane.showMessageDialog(funcionarioView, Mensagem.razaoSocialVazio, Mensagem.cadastro_funcionario, 0);
@@ -329,7 +342,7 @@ public class FuncionarioController {
             this.funcionarioView.getTfDataNascimento().grabFocus();
             return false;
         } else if (Valida.isDataVazio(this.funcionarioView.getTfDataNascimento().getText())) {
-            JOptionPane.showMessageDialog(funcionarioView, Mensagem.dataFundacaoInvalida, Mensagem.cadastro_funcionario, 0);
+            JOptionPane.showMessageDialog(funcionarioView, Mensagem.dataInvalida, Mensagem.cadastro_funcionario, 0);
             this.funcionarioView.getTfDataNascimento().grabFocus();
             return false;
         }
@@ -433,12 +446,12 @@ public class FuncionarioController {
      * método responsável por chamar o DAO e arregador os funcionarioes cadastrados 
      * no banco de dados
      */
-    private ArrayList<Funcionario> buscarTodos() {
+    private ArrayList<Funcionario> buscarTodos() { //?
         try {
-            return listaFuncionarios = new FuncionarioDAO().buscarTodos();
+            return listaFuncionarios = new FuncionarioDAO().buscarTodos(null);
         } catch (Exception e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(funcionarioView, Mensagem.funcionario_erro_consulta, Mensagem.cadastro_funcionario, 0);
+            JOptionPane.showMessageDialog(funcionarioView, "teste", Mensagem.cadastro_funcionario, 0);
         }
         return null;
     }
@@ -485,7 +498,7 @@ public class FuncionarioController {
         funcionarioView.getTfEmail().setText(funcionario.getContatoIdContato().getEmail());
         funcionarioView.getTfLogin().setText(funcionario.getLogin());
         funcionarioView.getTfSenha().setText(funcionario.getSenha());
-        //funcionarioView.getTfContato().setText(funcionario.getContato());
+      
 
     }
 
@@ -501,8 +514,6 @@ public class FuncionarioController {
         this.funcionarioView.getBtSalvarFuncionario().setEnabled(true);
         this.funcionarioView.getBtCancelar().setEnabled(true);
 
-        this.funcionarioView.getTfCpf().setEditable(true);
-        this.funcionarioView.getTfRg().setEditable(true);
         this.funcionarioView.getTfEndereco().setEditable(true);
         this.funcionarioView.getTfNumero().setEditable(true);
         this.funcionarioView.getTfBairro().setEditable(true);
@@ -513,5 +524,16 @@ public class FuncionarioController {
         this.funcionarioView.getTfComplemento().setEditable(true);
         this.funcionarioView.getTfEmail().setEditable(true);
 
+    }
+    
+
+    public ArrayList<Funcionario> buscarPorLogin(String login){
+        try {
+            return new FuncionarioDAO().buscarPorLogin(login);
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(funcionarioView, Mensagem.funcionario_erro_consulta, Mensagem.cadastro_funcionario, 0);
+        }
+        return null;
     }
 }

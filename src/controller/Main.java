@@ -14,7 +14,7 @@ public class Main {
      public static void main(String args[]) {
          
          
-         //new ProgressBar().progressBar();
+         new ProgressBar().progressBar();
          try {
              UIManager.setLookAndFeel("com.jtattoo.plaf.aero.AeroLookAndFeel");
                //UIManager.setLookAndFeel("com.jtattoo.plaf.mint.MintLookAndFeel");

@@ -29,7 +29,7 @@ public class PessoaJuridicaController {
             new PessoaJuridicaDAO().excluir(pessoa);
         } catch (Exception e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Erro ao excluir pessoa", "Cadastro ", 0);
+            JOptionPane.showMessageDialog(null, Mensagem.erro_excluir, Mensagem.cadastro_pessoa_juridica, 0);
         }
     }
 

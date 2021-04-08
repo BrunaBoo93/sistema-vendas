@@ -157,4 +157,9 @@ public class MenuController {
         menu.getBtSair().setEnabled(true);
         menu.getBtVendas().setEnabled(true);
     }
+    
+    public void carregarUsuario(){
+       menuView.getLbUsuario().setText(LoginController.nomeFuncionario);
+    }
+    
 }
